@@ -1,5 +1,5 @@
 from openpyxl import Workbook
-from app.xlsx_tools.tables import draw_tables
+from xlsx_tools.tables import draw_tables
 
 
 def main():
