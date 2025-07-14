@@ -1,0 +1,34 @@
+
+Пример метода
+Задание ширины колонок
+ws.column_dimensions['A'].width = 20
+
+Задание цвета ячеек
+main_table = PatternFill(fill_type="solid", fgColor="FF00FF") 
+
+Задание шрифта
+ws['A1'].font = Font(
+    name="Arial",     # Название шрифта
+    size=14,          # Размер шрифта
+    bold=True,        # Жирный
+    italic=True,      # Курсив
+    underline="single",  # Подчёркивание
+    color="FF0000"    # Цвет текста (красный)
+)
+
+Добавление формул
+ws["D2"] = "=AVERAGE(C2:C4)"
+
+Создание таблиц
+openpyxl.worksheet.table.Table
+
+Добавление фильтра
+ws.auto_filter.ref = "A1:C4"
+
+
+# Сохраняем файл
+wb.save("диаграмма.xlsx")
+
+
+
+
