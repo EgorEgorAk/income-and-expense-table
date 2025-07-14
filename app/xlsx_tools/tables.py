@@ -5,12 +5,15 @@ from openpyxl.styles import Font, Alignment, Border, Side
 
 
 def draw_tables(ws , table_name: str):
+    # задаём имя листа
+    ws.title = "asрывлофрывлфровasdasdadsБюдже"
 
     # захватываем активный лист
 
-    # задаём имя листа
-    ws.title = "Бюджет"
+    dwar1(ws)
+    expense(ws)
 
+def dwar1(ws):
     # ширина столбцов
     ws.column_dimensions['A'].width = 5
     ws.column_dimensions['B'].width = 30
@@ -165,3 +168,37 @@ def draw_tables(ws , table_name: str):
         for cell in row:
             cell.border = thin_border
     # Сохраняем файл
+
+
+def expense(ws):
+    ws.column_dimensions['A'].width = 5
+    ws.column_dimensions['B'].width = 30
+    ws.column_dimensions['C'].width = 15
+
+    # 🔧 Заголовки для таблицы (от A до AJ — это 36 столбцов)
+    headers = [f"Колонка {i}" for i in range(1, 37)]  # Или твои реальные названия
+    for col, header in enumerate(headers, start=1):
+        ws.cell(row=15, column=col, value=header)
+
+    # 👇 Убери объединение A15:AJ30 (она затрёт заголовки), перенеси его ниже или замени
+    # ws.merge_cells("A15:AJ30")  # ❌ Не объединяй строку заголовков
+
+    # Можно объединить A14:AJ14 и туда поместить заголовок таблицы
+    ws.merge_cells("A14:E14")
+    ws["A14"].value = "Расходы"
+    ws["A14"].font = Font(bold=True, size=14)
+    ws["A14"].alignment = Alignment(horizontal="center", vertical="center")
+
+    # 📊 Создание таблицы
+    table = Table(displayName="Расходы", ref="A15:AJ30")
+    ws.add_table(table)
+
+    thin_border = Border(
+        left=Side(style='thin', color='000000'),
+        right=Side(style='thin', color='000000'),
+        top=Side(style='thin', color='000000'),
+        bottom=Side(style='thin', color='000000')
+    )
+    for row in ws["A15:AJ30"]:
+        for cell in row:
+            cell.border = thin_border
