@@ -9,7 +9,7 @@ def draw_tables(ws , table_name: str):
     # захватываем активный лист
 
     # задаём имя листа
-    ws.title = "asdasdadsБюджет"
+    ws.title = "Бюджет"
 
     # ширина столбцов
     ws.column_dimensions['A'].width = 5
@@ -165,5 +165,3 @@ def draw_tables(ws , table_name: str):
         for cell in row:
             cell.border = thin_border
     # Сохраняем файл
-
-
