@@ -4,9 +4,9 @@ from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.styles import Font, Alignment, Border, Side
 
 
-def draw_tables(ws , table_name: str):
+def draw_tables(ws: str):
     # задаём имя листа
-    ws.title = "asрывлофрывлфровasdasdadsБюдже"
+    ws.title = "Бюджет"
 
     # захватываем активный лист
 
@@ -150,7 +150,7 @@ def dwar1(ws):
     title_cell.alignment = Alignment(horizontal="center", vertical="center")
 
     # Создаём таблицу
-    table = Table(displayName="Доходы", ref="A2:C8")
+    table = Table(displayName="IncomeTable", ref="A2:C8")
 
     # Добавляем таблицу на лист
     ws.add_table(table)
@@ -171,28 +171,100 @@ def dwar1(ws):
 
 
 def expense(ws):
-    ws.column_dimensions['A'].width = 5
-    ws.column_dimensions['B'].width = 30
-    ws.column_dimensions['C'].width = 15
-
-    # 🔧 Заголовки для таблицы (от A до AJ — это 36 столбцов)
-    headers = [f"Колонка {i}" for i in range(1, 37)]  # Или твои реальные названия
-    for col, header in enumerate(headers, start=1):
-        ws.cell(row=15, column=col, value=header)
-
-    # 👇 Убери объединение A15:AJ30 (она затрёт заголовки), перенеси его ниже или замени
-    # ws.merge_cells("A15:AJ30")  # ❌ Не объединяй строку заголовков
-
-    # Можно объединить A14:AJ14 и туда поместить заголовок таблицы
+    
+    # Заголовок таблицы "Расходы"
     ws.merge_cells("A14:E14")
     ws["A14"].value = "Расходы"
-    ws["A14"].font = Font(bold=True, size=14)
+    ws["A14"].font = Font(
+        name="Times New Roman",
+        size=14,
+        bold=True
+    )
     ws["A14"].alignment = Alignment(horizontal="center", vertical="center")
 
-    # 📊 Создание таблицы
-    table = Table(displayName="Расходы", ref="A15:AJ30")
+    # Заголовок под таблицу дней месяца
+    ws.merge_cells("F14:AJ14")
+    ws["F14"].value = "Дни месяца"
+    ws["F14"].font = Font(
+        name="Times New Roman",
+        size=14,
+        bold=True
+    )
+    ws["F14"].alignment = Alignment(horizontal="center", vertical="center")
+
+    # Шапка таблицы расходов
+    ws["A15"] = "№"
+    ws["B15"] = "Категория"
+    ws["C15"] = "Сумма"
+    ws["A15"].font = ws["B15"].font = ws["C15"].font = Font(
+        name="Times New Roman",
+        size=12,
+        bold=True
+    )
+    ws["A15"].alignment = ws["B15"].alignment = ws["C15"].alignment = Alignment(horizontal="center", vertical="center")
+
+    # Заголовки дней месяца (столбцы D по AH)
+    for day in range(1, 32):
+        cell = ws.cell(row=15, column=day + 3, value=day)
+        cell.font = Font(
+            name="Times New Roman",
+            size=10,
+            bold=True
+        )
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Заполнение примерных категорий расходов
+    categories = [
+        "Продукты",
+        "Транспорт",
+        "Коммунальные услуги",
+        "Развлечения",
+        "Одежда",
+        "Здоровье",
+        "Образование",
+        "Подарки",
+        "Домашние животные",            
+        "Прочее"
+    ]
+    # Заполнение таблицы категориями расходов
+    for i, category in enumerate(categories, start=16):
+        # Номер строки
+        ws.cell(row=i, column=1, value=i - 15).font = Font(
+            name="Times New Roman",
+            size=11
+        )
+        ws.cell(row=i, column=1).alignment = Alignment(horizontal="center")
+        # Категория
+        ws.cell(row=i, column=2, value=category).font = Font(
+            name="Times New Roman",
+            size=11
+        )
+        ws.cell(row=i, column=2).alignment = Alignment(horizontal="left")
+        # Пустая ячейка для суммы
+
+        # Сумма
+        ws.cell(row=i, column=3, value=0).font = Font(
+            name="Times New Roman",
+            size=11
+        )
+        ws.cell(row=i, column=3).alignment = Alignment(horizontal="center")
+
+    # Создание таблицы с названием "Расходы"
+    table = Table(displayName="ExpenseTable", ref="A15:AJ30")
+    style = TableStyleInfo(
+        name="TableStyleMedium9",
+        showFirstColumn=False,
+        showLastColumn=False,
+        showRowStripes=True,
+        showColumnStripes=False
+    )
+    table.tableStyleInfo = style
+    table.headerRowCount = 1
+
+    # Добавляем таблицу на лист
     ws.add_table(table)
 
+    # Добавление чёрной тонкой границы ко всем ячейкам таблицы
     thin_border = Border(
         left=Side(style='thin', color='000000'),
         right=Side(style='thin', color='000000'),
