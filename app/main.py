@@ -5,7 +5,7 @@ from xlsx_tools.tables import draw_tables
 def main():
   wb = Workbook()
   sheet = wb.active
-  tablePath = "files/table_test.xlsx"
+  tablePath = "app/files/table_test.xlsx"
 
   draw_tables(sheet)
   wb.save(tablePath)
