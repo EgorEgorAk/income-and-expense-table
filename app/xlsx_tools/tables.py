@@ -2,7 +2,7 @@ from openpyxl import Workbook
 from openpyxl.styles import PatternFill, Font, Alignment
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.styles import Font, Alignment, Border, Side
-
+from openpyxl.formatting.rule import CellIsRule
 
 def draw_tables(ws):
     # задаём имя листа
@@ -416,6 +416,9 @@ def all(ws):
     ws["I3"] = "=C8"
     ws["I4"] = "=C30"
     ws["I5"] = "=I3-I4"
+    # Удаляем прямую заливку для I5
+    from openpyxl.styles import PatternFill
+    ws['I5'].fill = PatternFill(fill_type=None)
 
     # Теперь создаём таблицу
     table = Table(displayName="Отчет", ref="G2:I5")
@@ -430,3 +433,11 @@ def all(ws):
             cell.border = thin_border
 
     ws.add_table(table)
+
+
+    ws.conditional_formatting.add('I5',
+        CellIsRule(operator='equal', formula=['0'], fill=PatternFill(fill_type="solid", fgColor="FFE600")))
+    ws.conditional_formatting.add('I5',
+        CellIsRule(operator='greaterThan', formula=['0'], fill=PatternFill(fill_type="solid", fgColor="44FF00")))
+    ws.conditional_formatting.add('I5',
+        CellIsRule(operator='lessThan', formula=['0'], fill=PatternFill(fill_type="solid", fgColor="FF4400")))
