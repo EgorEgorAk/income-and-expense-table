@@ -18,7 +18,7 @@ def dwar1(ws, inc_category, inc_sum):
     ws['A2'] = '№'
     ws['B2'] = 'Категории доходов'
     ws['C2'] = 'Сумма'
-    
+
     # Вставка пользовательских данных
     for i, (category, summ) in enumerate(zip(inc_category, inc_sum), start=3):
 
@@ -83,6 +83,26 @@ def expense(ws, exp_category, exp_sum):
     for row in ws[f"A15:C{last_row+1}"]:
         for cell in row:
             cell.border = thin_border
+def all(ws):
+    ws.merge_cells("G1:I1")
+    ws["G1"].value = "Отчет"
+    ws["G1"].font = Font(name="Times New Roman", size=18, bold=True, italic=True, underline="single")
+    ws["G"].alignment = Alignment(horizontal="center", vertical="center")
+    ws["G2"] = "№"
+    ws["H2"] = "Описание"
+    ws["I2"] = "Сумма"
+    ws["G3"] = 1
+    ws["G4"] = 2
+    ws["G5"] = 3
+    ws["H2"] = "Доходы за месяц"
+    ws["H3"] = "Расходы за месяц"
+    ws["Н4"] = "Остаток"
+    ws["I3"] = "=C8"
+    ws["I4"] = "=C30"
+    ws["I4"] = "=C8-C30"
+    ws["A15"].font = ws["B15"].font = ws["C15"].font = Font(name="Times New Roman", size=16, bold=True)
+    ws["A15"].alignment = ws["B15"].alignment = ws["C15"].alignment = Alignment(horizontal="center", vertical="center")
+
 
 def fill_template(inc_category, inc_sum, exp_category, exp_sum, template_path, file_path):
     wb = load_workbook(template_path)
