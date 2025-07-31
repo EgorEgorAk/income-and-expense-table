@@ -3,7 +3,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, Messa
 from my_token import TOKEN
 from xlsx_tools.tables import fill_template
 import os
-
+from decimal import Decimal
 user_data = {}  # user_id: {'inc_category': [], 'inc_sum': [], 'exp_category': [], 'exp_sum': []}
 
 # Стартовое сообщение
@@ -48,7 +48,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     _, rest = text.split(":", 1)
                     parts = rest.strip().rsplit(" ", 1)
                     category = parts[0].strip()
-                    summ = float(parts[1].replace(",", "."))
+                    summ = Decimal(parts[1].replace(",", "."))
                 except Exception:
                     await update.message.reply_text("Формат: Доход: <категория> <сумма>")
                     return
@@ -60,7 +60,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     _, rest = text.split(":", 1)
                     parts = rest.strip().rsplit(" ", 1)
                     category = parts[0].strip()
-                    summ = float(parts[1].replace(",", "."))
+                    summ = Decimal(parts[1].replace(",", "."))
                 except Exception:
                     await update.message.reply_text("Формат: Расход: <категория> <сумма>")
                     return

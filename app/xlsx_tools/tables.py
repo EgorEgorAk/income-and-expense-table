@@ -3,6 +3,7 @@ from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl import load_workbook
 
+
 def draw_tables(inc_category, inc_sum, exp_category, exp_sum, file_path):
     wb = Workbook()
     ws = wb.active
@@ -72,6 +73,7 @@ def expense(ws, exp_category, exp_sum):
 
     ws[f'B{last_row+1}'] = 'Итого'
     ws[f'C{last_row+1}'] = f'=SUM(C16:C{last_row})'
+    ws[f'C{last_row+1}'].number_format = '0.00'
     ws[f'B{last_row+1}'].font = ws[f'C{last_row+1}'].font = Font(name="Times New Roman", size=14, bold=True)
 
 
@@ -98,8 +100,11 @@ def all(ws):
     ws["H3"] = "Расходы за месяц"
     ws["Н4"] = "Остаток"
     ws["I3"] = "=C8"
+    ws['I3'].number_format = '0.00'
     ws["I4"] = "=C30"
-    ws["I4"] = "=C8-C30"
+    ws['I4'].number_format = "0.00"
+    ws["I5"] = "=C8-C30"
+    ws['I5'].number_format = "0.00"
     ws["A15"].font = ws["B15"].font = ws["C15"].font = Font(name="Times New Roman", size=16, bold=True)
     ws["A15"].alignment = ws["B15"].alignment = ws["C15"].alignment = Alignment(horizontal="center", vertical="center")
 
@@ -113,13 +118,16 @@ def fill_template(inc_category, inc_sum, exp_category, exp_sum, template_path, f
         if i > 7:  # не больше строк, чем в шаблоне
             break
         ws[f'B{i}'] = category
-        ws[f'C{i}'] = summ
+
+        ws[f'C{i}'] = float(summ)
+        ws[f'C{i}'].number_format = "0.00"
 
     # Вставка расходов (B16:C29)
     for i, (category, summ) in enumerate(zip(exp_category, exp_sum), start=16):
         if i > 29:
             break
         ws[f'B{i}'] = category
-        ws[f'C{i}'] = summ
+        ws[f'C{i}'] = float(summ)
+        ws[f'C{i}'].number_format = "0.00"
 
     wb.save(file_path)
